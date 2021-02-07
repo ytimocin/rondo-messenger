@@ -1,9 +1,9 @@
 package com.rondo.messenger.client;
 
+import com.rondo.messenger.domain.IncomingMessage;
 import com.rondo.messenger.domain.OutgoingMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -28,10 +28,12 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
         session.subscribe("/topic/greetings", this);
         logger.info("Subscribed to /topic/greetings");
 
-        JSONObject json = new JSONObject();
-        json.put("name", "Yetkin");
+        IncomingMessage incomingMessage = IncomingMessage.builder()
+                .from("Yetkin")
+                .message("Hello")
+                .build();
 
-        session.send("/rondo-messenger/hello", json.toString());
+        session.send("/rondo-messenger/hello", incomingMessage);
         logger.info("Message sent to websocket server");
     }
 
@@ -47,19 +49,6 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 
     @Override
     public void handleFrame(StompHeaders headers, Object payload) {
-        logger.info("hoop");
         logger.info("Received : " + payload.toString());
     }
-
-    /**
-     * A sample message instance.
-     *
-     * @return instance of <code>Message</code>
-     */
-//    private Message getSampleMessage() {
-//        Message msg = new Message();
-//        msg.setFrom("Nicky");
-//        msg.setText("Howdy!!");
-//        return msg;
-//    }
 }

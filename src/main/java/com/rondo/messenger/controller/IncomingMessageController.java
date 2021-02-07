@@ -6,6 +6,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import java.time.Instant;
+
 @Controller
 public class IncomingMessageController {
 
@@ -13,7 +15,9 @@ public class IncomingMessageController {
     @SendTo("/topic/greetings")
     public OutgoingMessage reply(IncomingMessage incomingMessage) {
         return OutgoingMessage.builder()
-                .content("Hello, " + incomingMessage.getName())
+                .from(incomingMessage.getFrom())
+                .message(incomingMessage.getMessage())
+                .timestamp(Instant.now().toEpochMilli())
                 .build();
     }
 

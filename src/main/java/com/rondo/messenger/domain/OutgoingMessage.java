@@ -14,11 +14,13 @@ import lombok.Setter;
 @Setter
 public class OutgoingMessage {
 
-    private String content;
+    private String from;
+    private String message;
+    private long timestamp;
 
     @Override
     public String toString() {
-        return getContent();
+        return "Message: " + getMessage() + " From: " + getFrom() + " At: " + getTimestamp();
     }
 
 }
